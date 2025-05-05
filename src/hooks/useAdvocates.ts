@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from "react";
 
 interface Advocate {
@@ -15,13 +17,21 @@ export function useAdvocates() {
   const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
 
   useEffect(() => {
-    console.log("fetching advocates...");
-    fetch("/api/advocates").then((response) => {
-      response.json().then((jsonResponse) => {
-        setAdvocates(jsonResponse.data);
-        setFilteredAdvocates(jsonResponse.data);
-      });
-    });
+    const fetchAdvocates = async () => {
+      try {
+        const response = await fetch("/api/advocates");
+        if (!response.ok) {
+          throw new Error('Failed to fetch advocates');
+        }
+        const data = await response.json();
+        setAdvocates(data.data);
+        setFilteredAdvocates(data.data);
+      } catch (error) {
+        console.error('Error fetching advocates:', error);
+      }
+    };
+
+    fetchAdvocates();
   }, []);
 
   const filterAdvocates = (searchTerm: string) => {

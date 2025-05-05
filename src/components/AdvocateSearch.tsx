@@ -1,30 +1,42 @@
+'use client';
+
+import { useState } from 'react';
+
 interface AdvocateSearchProps {
   onSearch: (searchTerm: string) => void;
   onReset: () => void;
 }
 
 export function AdvocateSearch({ onSearch, onReset }: AdvocateSearchProps) {
+  const [searchTerm, setSearchTerm] = useState('');
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchTerm = e.target.value;
-    document.getElementById("search-term")!.innerHTML = searchTerm;
-    onSearch(searchTerm);
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
+    onSearch(newSearchTerm);
+  };
+
+  const handleReset = () => {
+    setSearchTerm('');
+    onReset();
   };
 
   return (
     <div className="mb-8">
       <p className="text-lg font-semibold mb-2">Search</p>
       <p className="mb-2">
-        Searching for: <span id="search-term" className="font-medium"></span>
+        Searching for: <span className="font-medium">{searchTerm}</span>
       </p>
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         <input 
-          className="border border-gray-300 rounded px-4 py-2 w-full max-w-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+          className="border border-gray-300 rounded px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500" 
           onChange={handleChange} 
+          value={searchTerm}
           placeholder="Search advocates..."
         />
         <button 
-          onClick={onReset}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+          onClick={handleReset}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors whitespace-nowrap"
         >
           Reset Search
         </button>

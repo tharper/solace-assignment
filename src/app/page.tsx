@@ -12,13 +12,16 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       <main className="container mx-auto px-4 py-8">
-        
-        <AdvocateSearch 
-          onSearch={filterAdvocates}
-          onReset={resetFilter}
-        />
-
-        <AdvocateTable advocates={filteredAdvocates} />
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Advocate Search</h1>
+          <AdvocateSearch 
+            onSearch={filterAdvocates}
+            onReset={resetFilter}
+          />
+          <div className="mt-6 sm:mt-8">
+            <AdvocateTable advocates={filteredAdvocates} />
+          </div>
+        </div>
       </main>
     </div>
   );
