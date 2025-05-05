@@ -1,3 +1,5 @@
+import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
+
 interface Advocate {
   firstName: string;
   lastName: string;
@@ -40,7 +42,7 @@ export function AdvocateTable({ advocates }: AdvocateTableProps) {
                 ))}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">{advocate.yearsOfExperience}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{advocate.phoneNumber}</td>
+              <td className="px-6 py-4 whitespace-nowrap"><a href={`tel:${advocate.phoneNumber}`}>{formatPhoneNumber(advocate.phoneNumber)}</a></td>
             </tr>
           ))}
         </tbody>
