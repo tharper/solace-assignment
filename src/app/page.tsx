@@ -3,10 +3,11 @@
 import { useAdvocates } from "@/hooks/useAdvocates";
 import { AdvocateSearch } from "@/components/AdvocateSearch";
 import { AdvocateTable } from "@/components/AdvocateTable";
+import { Pagination } from "@/components/Pagination";
 import { Header } from "@/components/Header";
 
 export default function Home() {
-  const { filteredAdvocates, filterAdvocates, resetFilter } = useAdvocates();
+  const { filteredAdvocates, filterAdvocates, resetFilter, pagination, setCurrentPage } = useAdvocates();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -20,6 +21,12 @@ export default function Home() {
           />
           <div className="mt-6 sm:mt-8">
             <AdvocateTable advocates={filteredAdvocates} />
+            <Pagination
+              currentPage={pagination.currentPage}
+              totalItems={pagination.totalItems}
+              itemsPerPage={pagination.itemsPerPage}
+              onPageChange={setCurrentPage}
+            />
           </div>
         </div>
       </main>

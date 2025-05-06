@@ -12,9 +12,20 @@ interface Advocate {
   phoneNumber: number;
 }
 
+interface PaginationState {
+  currentPage: number;
+  itemsPerPage: number;
+  totalItems: number;
+}
+
 export function useAdvocates() {
   const [advocates, setAdvocates] = useState<Advocate[]>([]);
   const [filteredAdvocates, setFilteredAdvocates] = useState<Advocate[]>([]);
+  const [pagination, setPagination] = useState<PaginationState>({
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItems: 0
+  });
 
   useEffect(() => {
     const fetchAdvocates = async () => {
@@ -26,6 +37,7 @@ export function useAdvocates() {
         const data = await response.json();
         setAdvocates(data.data);
         setFilteredAdvocates(data.data);
+        setPagination(prev => ({ ...prev, totalItems: data.data.length }));
       } catch (error) {
         console.error('Error fetching advocates:', error);
       }
@@ -37,6 +49,7 @@ export function useAdvocates() {
   const filterAdvocates = (searchTerm: string) => {
     if (!searchTerm) {
       setFilteredAdvocates(advocates);
+      setPagination(prev => ({ ...prev, currentPage: 1, totalItems: advocates.length }));
       return;
     }
 
@@ -52,16 +65,33 @@ export function useAdvocates() {
     });
 
     setFilteredAdvocates(filtered);
+    setPagination(prev => ({ ...prev, currentPage: 1, totalItems: filtered.length }));
   };
 
   const resetFilter = () => {
     setFilteredAdvocates(advocates);
+    setPagination(prev => ({ ...prev, currentPage: 1, totalItems: advocates.length }));
+  };
+
+  const setCurrentPage = (page: number) => {
+    if (page < 1 || page > Math.ceil(pagination.totalItems / pagination.itemsPerPage)) {
+      return;
+    }
+    setPagination(prev => ({ ...prev, currentPage: page }));
+  };
+
+  const getPaginatedAdvocates = () => {
+    const startIndex = (pagination.currentPage - 1) * pagination.itemsPerPage;
+    const endIndex = startIndex + pagination.itemsPerPage;
+    return filteredAdvocates.slice(startIndex, endIndex);
   };
 
   return {
     advocates,
-    filteredAdvocates,
+    filteredAdvocates: getPaginatedAdvocates(),
     filterAdvocates,
-    resetFilter
+    resetFilter,
+    pagination,
+    setCurrentPage
   };
 } 

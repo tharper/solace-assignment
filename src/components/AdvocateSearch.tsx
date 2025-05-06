@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useDebounce } from '@/hooks/useDebounce';
 
 interface AdvocateSearchProps {
   onSearch: (searchTerm: string) => void;
@@ -9,11 +10,11 @@ interface AdvocateSearchProps {
 
 export function AdvocateSearch({ onSearch, onReset }: AdvocateSearchProps) {
   const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newSearchTerm = e.target.value;
     setSearchTerm(newSearchTerm);
-    onSearch(newSearchTerm);
   };
 
   const handleReset = () => {
@@ -21,9 +22,13 @@ export function AdvocateSearch({ onSearch, onReset }: AdvocateSearchProps) {
     onReset();
   };
 
+  // Call onSearch with debounced value
+  useEffect(() => {
+    onSearch(debouncedSearchTerm);
+  }, [debouncedSearchTerm]);
+
   return (
     <div className="mb-8">
-      <p className="text-lg font-semibold mb-2">Search</p>
       <p className="mb-2">
         Searching for: <span className="font-medium">{searchTerm}</span>
       </p>
