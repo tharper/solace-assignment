@@ -1,6 +1,6 @@
 import { AdvocateTable } from "./AdvocateTable";
 import { AdvocateCard } from "./AdvocateCard";
-import { useMediaQuery } from "react-responsive";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 interface Advocate {
   firstName: string;
