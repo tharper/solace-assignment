@@ -2,7 +2,7 @@
 
 import { useAdvocates } from "@/hooks/useAdvocates";
 import { AdvocateSearch } from "@/components/AdvocateSearch";
-import { AdvocateTable } from "@/components/AdvocateTable";
+import { AdvocateList } from "@/components/AdvocateList";
 import { Pagination } from "@/components/Pagination";
 import { Header } from "@/components/Header";
 
@@ -20,7 +20,7 @@ export default function Home() {
             onReset={resetFilter}
           />
           <div className="mt-6 sm:mt-8">
-            <AdvocateTable advocates={filteredAdvocates} />
+            <AdvocateList advocates={filteredAdvocates} />
             <Pagination
               currentPage={pagination.currentPage}
               totalItems={pagination.totalItems}
